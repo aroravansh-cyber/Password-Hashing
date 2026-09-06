@@ -4,65 +4,77 @@ import string
 
 
 def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+    password = password.encode()
+    hashed = hashlib.sha256(password)
+    return hashed.hexdigest()
 
 
-def generate_password(length=16):
+def generate_password(length):
     characters = string.ascii_letters + string.digits + string.punctuation
-    return ''.join(secrets.choice(characters) for _ in range(length))
+
+    password = ""
+
+    for i in range(length):
+        password += secrets.choice(characters)
+
+    return password
 
 
-print("=" * 60)
+print("=" * 50)
 print("        PASSWORD SECURITY TOOL")
-print("=" * 60)
+print("=" * 50)
 
-print("""
-1. Hash your password
-2. Generate a secure password
-3. Verify a password
-4. Exit
-""")
+print("\n1. Hash Password")
+print("2. Generate Password")
+print("3. Verify Password")
+print("4. Exit")
 
-choice = input("ENTER YOUR CHOICE: ")
+choice = input("\nEnter your choice: ")
+
 
 if choice == "1":
 
-    password = input("ENTER YOUR PASSWORD: ")
+    password = input("Enter your password: ")
 
-    hashed_password = hash_password(password)
+    password_hash = hash_password(password)
 
-    print("\nPASSWORD HASHED SUCCESSFULLY!")
-    print("SHA-256 Hash:")
-    print(hashed_password)
+    print("\nPassword Hash:")
+    print(password_hash)
+
 
 elif choice == "2":
 
-    length = int(input("ENTER PASSWORD LENGTH: "))
+    length = int(input("Enter password length: "))
 
     if length < 8:
-        print("Password length should be at least 8 characters.")
+        print("Password should be at least 8 characters.")
+
     else:
         password = generate_password(length)
 
-        print("\nSECURE PASSWORD GENERATED:")
+        print("\nGenerated Password:")
         print(password)
+
 
 elif choice == "3":
 
-    original_hash = input("ENTER THE STORED HASH: ")
-    password = input("ENTER PASSWORD FOR VERIFICATION: ")
+    password = input("Enter your password: ")
+    stored_hash = input("Enter stored hash: ")
 
-    new_hash = hash_password(password)
+    password_hash = hash_password(password)
 
-    if new_hash == original_hash:
-        print("\nPASSWORD VERIFIED SUCCESSFULLY!")
+    if password_hash == stored_hash:
+        print("\nPassword Verified!")
+
     else:
-        print("\nWRONG PASSWORD!")
+        print("\nWrong Password!")
+
 
 elif choice == "4":
 
-    print("Exiting...")
+    print("Program closed.")
+
 
 else:
 
-    print("INVALID CHOICE!")
+    print("Invalid choice.")
